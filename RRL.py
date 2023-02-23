@@ -11,21 +11,21 @@ class RRL(object):
     """
     time_index:np.array
     rainfall_intensity:np.array
-    al:List[float]
+    area_list:List[float]
 
 
     @staticmethod
-    def area_ri(shape:np.shape,n:int,ri:np.array,al:List[float])->np.array:
+    def area_ri(shape:np.shape, n:int, ri:np.array, area_list:List[float])->np.array:
         # ri means rainfall intensity
         # shape is the shape of time index
         # n is the number of area
         # al is the list of area(m^2)
         r = np.zeros(shape)
-        r[n-1:n-1+len(ri)] = ri*al[n-1]
+        r[n-1:n-1+len(ri)] = ri * area_list[n - 1]
         return r
 
     def __post_init__(self):
-        self.A_R = np.array([RRL.area_ri(self.time_index.shape,i,self.rainfall_intensity,self.al) for i in range(1,len(self.al)+1)])
+        self.A_R = np.array([RRL.area_ri(self.time_index.shape, i, self.rainfall_intensity, self.area_list) for i in range(1, len(self.area_list) + 1)])
         self.A_R_D= {"A{}".format(i+1):j for i,j in enumerate(self.A_R)}
         self.df = pd.DataFrame(self.A_R_D, index= self.time_index)
 
